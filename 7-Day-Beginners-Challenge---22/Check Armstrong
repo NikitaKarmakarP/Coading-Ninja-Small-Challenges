@@ -1,0 +1,30 @@
+public class Solution {
+    public static boolean checkArmstrong(int n) {
+        // Step 1: Find the number of digits in the number
+        int originalNumber = n;
+        int numDigits = 0;
+        while (n > 0) {
+            n /= 10;  // Remove the last digit
+            numDigits++;  // Increment digit count
+        }
+        
+        // Step 2: Compute the sum of digits raised to the power of numDigits
+        n = originalNumber;  // Restore the original number
+        int sum = 0;
+        while (n > 0) {
+            int digit = n % 10;  // Get the last digit
+            sum += Math.pow(digit, numDigits);  // Add digit raised to the power
+            n /= 10;  // Remove the last digit
+        }
+        
+        // Step 3: Check if the sum equals the original number
+        return sum == originalNumber;
+    }
+
+    public static void main(String[] args) {
+        // Test cases
+        System.out.println(checkArmstrong(1634));  // true
+        System.out.println(checkArmstrong(1));    // true
+        System.out.println(checkArmstrong(103));  // false
+    }
+}
