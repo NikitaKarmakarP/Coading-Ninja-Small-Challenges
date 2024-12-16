@@ -8,8 +8,6 @@ This repository is a collection of small coding challenges 💻 aimed at helping
 
 - **Valid Perfect Square**: A challenge to check if a number is a perfect square.
 - **Most Stones Removed with Same Row or Column**: A problem focusing on grid-based operations to remove the maximum number of stones from the same row or column.
-  
-(Feel free to add more challenges here as you continue working on them!)
 
 ## How to Use
 
