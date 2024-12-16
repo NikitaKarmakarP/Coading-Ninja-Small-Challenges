@@ -1,0 +1,61 @@
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class UnionFind {
+private:
+    unordered_map<int, int> parent;
+    unordered_map<int, int> rank;
+    int connectedComponents;
+
+public:
+    UnionFind() : connectedComponents(0) {}
+
+    int find(int u) {
+        if (parent.find(u) == parent.end()) {
+            parent[u] = u;
+            rank[u] = 0;
+            connectedComponents++;
+        }
+        if (parent[u] != u) {
+            parent[u] = find(parent[u]);
+        }
+        return parent[u];
+    }
+
+    void unionSets(int u, int v) {
+        int rootU = find(u);
+        int rootV = find(v);
+
+        if (rootU != rootV) {
+            connectedComponents--;
+            if (rank[rootU] < rank[rootV]) {
+                parent[rootU] = rootV;
+            } else if (rank[rootU] > rank[rootV]) {
+                parent[rootV] = rootU;
+            } else {
+                parent[rootV] = rootU;
+                rank[rootU]++;
+            }
+        }
+    }
+
+    int getConnectedComponents() const {
+        return connectedComponents;
+    }
+};
+
+int removeStones(vector<vector<int>> &stones) {
+    UnionFind uf;
+
+    // Map row and column indices to the same union-find space
+    for (auto &stone : stones) {
+        int row = stone[0];            // Represent the row
+        int col = stone[1] + 1001;     // Offset columns to avoid collision with rows
+        uf.unionSets(row, col);
+    }
+
+    int totalStones = stones.size();
+    int components = uf.getConnectedComponents();
+    return totalStones - components;
+}
