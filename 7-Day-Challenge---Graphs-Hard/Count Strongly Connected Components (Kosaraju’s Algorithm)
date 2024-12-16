@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+void dfs(int node, vector<vector<int>> &adj, vector<bool> &visited, stack<int> &finishStack) {
+    visited[node] = true;
+    for (int neighbor : adj[node]) {
+        if (!visited[neighbor]) {
+            dfs(neighbor, adj, visited, finishStack);
+        }
+    }
+    finishStack.push(node); // Push the node onto the stack after finishing its DFS.
+}
+
+void reverseDFS(int node, vector<vector<int>> &transposeAdj, vector<bool> &visited) {
+    visited[node] = true;
+    for (int neighbor : transposeAdj[node]) {
+        if (!visited[neighbor]) {
+            reverseDFS(neighbor, transposeAdj, visited);
+        }
+    }
+}
+
+int stronglyConnectedComponents(int V, vector<vector<int>> &edges) {
+    // Step 1: Create adjacency list
+    vector<vector<int>> adj(V);
+    for (auto &edge : edges) {
+        adj[edge[0]].push_back(edge[1]);
+    }
+
+    // Step 2: Perform DFS to compute finish order
+    stack<int> finishStack;
+    vector<bool> visited(V, false);
+    for (int i = 0; i < V; i++) {
+        if (!visited[i]) {
+            dfs(i, adj, visited, finishStack);
+        }
+    }
+
+    // Step 3: Transpose the graph
+    vector<vector<int>> transposeAdj(V);
+    for (int i = 0; i < V; i++) {
+        for (int neighbor : adj[i]) {
+            transposeAdj[neighbor].push_back(i);
+        }
+    }
+
+    // Step 4: Perform DFS on the transposed graph in reverse finish order
+    fill(visited.begin(), visited.end(), false);
+    int sccCount = 0;
+    while (!finishStack.empty()) {
+        int node = finishStack.top();
+        finishStack.pop();
+        if (!visited[node]) {
+            reverseDFS(node, transposeAdj, visited);
+            sccCount++; // Each DFS traversal corresponds to one SCC.
+        }
+    }
+
+    return sccCount;
+}
