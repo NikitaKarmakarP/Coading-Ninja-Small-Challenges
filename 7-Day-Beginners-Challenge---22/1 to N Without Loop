@@ -1,0 +1,34 @@
+public class Solution {
+    // Helper function for recursion
+    private static void generateNumbers(int[] arr, int x, int index) {
+        // Base case: If x is less than 1, stop
+        if (x <= 0) {
+            return;
+        }
+
+        // Recursive case: generate the numbers up to x - 1
+        generateNumbers(arr, x - 1, index - 1);
+
+        // Add the current number x at the current index
+        arr[index] = x;
+    }
+
+    public static int[] printNos(int x) {
+        // Create an array of size x
+        int[] arr = new int[x];
+
+        // Call the helper function to fill the array
+        generateNumbers(arr, x, x - 1);
+
+        // Return the array
+        return arr;
+    }
+
+    // Main function to test
+    public static void main(String[] args) {
+        int[] result = printNos(5);
+        for (int num : result) {
+            System.out.print(num + " ");
+        }
+    }
+}
