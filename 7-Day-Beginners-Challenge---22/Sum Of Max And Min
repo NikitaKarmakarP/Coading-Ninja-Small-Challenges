@@ -1,0 +1,53 @@
+import java.util.* ;
+import java.io.*; 
+
+public class Solution {
+
+    // Function to calculate sum of maximum and minimum elements in the array
+    public static int sumOfMaxMin(int[] arr, int n) {
+        // Initialize min and max with the first element of the array
+        int min_val = arr[0];
+        int max_val = arr[0];
+
+        // Iterate through the array to find the min and max values
+        for (int i = 1; i < n; i++) {
+            if (arr[i] < min_val) {
+                min_val = arr[i];  // Update min if we find a smaller value
+            }
+            if (arr[i] > max_val) {
+                max_val = arr[i];  // Update max if we find a larger value
+            }
+        }
+
+        // Return the sum of min and max values
+        return min_val + max_val;
+    }
+
+    // Main function to handle input and output
+    public static void main(String[] args) throws IOException {
+        // Reading input
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        // Number of test cases
+        int T = Integer.parseInt(br.readLine());
+        
+        // Process each test case
+        for (int t = 0; t < T; t++) {
+            // Read the size of the array
+            int n = Integer.parseInt(br.readLine());
+            
+            // Read the array elements
+            String[] arrStr = br.readLine().split(" ");
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++) {
+                arr[i] = Integer.parseInt(arrStr[i]);
+            }
+
+            // Call the function to get the result
+            int result = sumOfMaxMin(arr, n);
+            
+            // Print the result
+            System.out.println(result);
+        }
+    }
+}
