@@ -1,0 +1,27 @@
+import java.util.* ;
+import java.io.*; 
+
+public class Solution {
+
+    // Method to convert the given string to lowercase
+    public static String toLowerCase(String str) {
+        // Convert the string to lowercase using the built-in toLowerCase method
+        return str.toLowerCase();
+    }
+
+    public static void main(String[] args) throws IOException {
+        // Reading the number of test cases
+        Scanner sc = new Scanner(System.in);
+        int T = sc.nextInt(); // Number of test cases
+        sc.nextLine(); // Consume the newline character
+
+        // Loop for each test case
+        for (int i = 0; i < T; i++) {
+            // Reading the string for this test case
+            String str = sc.nextLine();
+
+            // Convert to lowercase and print the result
+            System.out.println(toLowerCase(str));
+        }
+    }
+}
