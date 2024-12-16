@@ -1,0 +1,89 @@
+import java.util.*;
+
+public class Solution {
+
+    // Directions for moving in the grid: up, down, left, right
+    private static final int[] directions = {-1, 0, 1, 0, 0, -1, 0, 1};
+
+    // Helper function to check if we can reach (n-1, n-1) with the current threshold T
+    private static boolean canReach(int[][] matrix, int T, int n) {
+        // Initialize visited array to mark visited cells
+        boolean[][] visited = new boolean[n][n];
+        Queue<int[]> queue = new LinkedList<>();
+        
+        // Start from (0, 0) if its value is <= T
+        if (matrix[0][0] <= T) {
+            queue.offer(new int[]{0, 0});
+            visited[0][0] = true;
+        } else {
+            return false;  // If the starting cell value is greater than T, return false
+        }
+        
+        while (!queue.isEmpty()) {
+            int[] cell = queue.poll();
+            int x = cell[0], y = cell[1];
+            
+            // If we reached the bottom-right corner
+            if (x == n - 1 && y == n - 1) {
+                return true;
+            }
+            
+            // Try to move to adjacent cells
+            for (int i = 0; i < 4; i++) {
+                int nx = x + directions[i];
+                int ny = y + directions[i + 4];
+                
+                // Check if the move is within bounds and the value of the new cell is <= T
+                if (nx >= 0 && ny >= 0 && nx < n && ny < n && !visited[nx][ny] && matrix[nx][ny] <= T) {
+                    visited[nx][ny] = true;
+                    queue.offer(new int[]{nx, ny});
+                }
+            }
+        }
+        
+        // If we can't reach the target
+        return false;
+    }
+
+    // Main function to find the minimum time T required to reach the bottom-right corner
+    public static int minimumTime(int n, int[][] matrix) {
+        int left = 0;
+        int right = 0;
+        
+        // Find the maximum value in the matrix to set the upper bound for T
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                right = Math.max(right, matrix[i][j]);
+            }
+        }
+        
+        int result = right;
+        
+        // Binary search on T
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            // If it's possible to reach the target at time T = mid
+            if (canReach(matrix, mid, n)) {
+                result = mid;
+                right = mid - 1;  // Try to find a smaller T
+            } else {
+                left = mid + 1;  // Increase T to allow more traversal
+            }
+        }
+        
+        return result;
+    }
+
+    // Main method for testing
+    public static void main(String[] args) {
+        int n = 3;
+        int[][] matrix = {
+            {0, 1, 4},
+            {7, 6, 3},
+            {5, 8, 2}
+        };
+
+        System.out.println(minimumTime(n, matrix));  // Expected output: 4
+    }
+}
