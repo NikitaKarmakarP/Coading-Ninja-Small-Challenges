@@ -1,0 +1,75 @@
+#include <vector>
+using namespace std;
+
+class UnionFind {
+private:
+    vector<int> parent, rank;
+
+public:
+    UnionFind(int n) {
+        parent.resize(n);
+        rank.resize(n, 0);
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+    }
+
+    int find(int u) {
+        if (parent[u] != u) {
+            parent[u] = find(parent[u]);
+        }
+        return parent[u];
+    }
+
+    bool unite(int u, int v) {
+        int rootU = find(u);
+        int rootV = find(v);
+
+        if (rootU == rootV) return false; // Already in the same set
+
+        if (rank[rootU] > rank[rootV]) {
+            parent[rootV] = rootU;
+        } else if (rank[rootU] < rank[rootV]) {
+            parent[rootU] = rootV;
+        } else {
+            parent[rootV] = rootU;
+            rank[rootU]++;
+        }
+
+        return true;
+    }
+};
+
+int makeGraphConnected(int n, vector<pair<int, int>> edges, int m) {
+    if (m < n - 1) {
+        return -1; // Not enough edges to connect all nodes
+    }
+
+    // Step 2: Use Union-Find to find connected components
+    UnionFind uf(n);
+    int redundantEdges = 0;
+    for (auto edge : edges) {
+        int u = edge.first - 1; // Convert 1-based to 0-based index
+        int v = edge.second - 1;
+
+        if (!uf.unite(u, v)) {
+            redundantEdges++; // Count redundant edges
+        }
+    }
+
+    // Step 3: Count the number of connected components
+    int components = 0;
+    for (int i = 0; i < n; ++i) {
+        if (uf.find(i) == i) {
+            components++;
+        }
+    }
+
+    // Step 4: Calculate the minimum operations
+    int requiredEdges = components - 1;
+    if (redundantEdges >= requiredEdges) {
+        return requiredEdges;
+    } else {
+        return -1; // Not enough redundant edges to connect the graph
+    }
+}
