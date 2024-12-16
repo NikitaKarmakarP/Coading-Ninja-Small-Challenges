@@ -1,0 +1,35 @@
+public class Solution {
+    public static int[] generateFibonacciNumbers(int n) {
+        // Create an array to hold the first 'n' Fibonacci numbers
+        int[] fibNumbers = new int[n];
+        
+        // Handle the case where n = 1, the Fibonacci sequence is just [0]
+        if (n > 0) {
+            fibNumbers[0] = 0; // The first Fibonacci number is 0
+        }
+        
+        // Handle the case where n = 2, the Fibonacci sequence is [0, 1]
+        if (n > 1) {
+            fibNumbers[1] = 1; // The second Fibonacci number is 1
+        }
+        
+        // Compute the remaining Fibonacci numbers for n > 2
+        for (int i = 2; i < n; i++) {
+            fibNumbers[i] = fibNumbers[i - 1] + fibNumbers[i - 2];
+        }
+        
+        // Return the array containing the first 'n' Fibonacci numbers
+        return fibNumbers;
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        int n = 5; // The number of Fibonacci numbers to generate
+        int[] result = generateFibonacciNumbers(n);
+        
+        // Print the result
+        for (int num : result) {
+            System.out.print(num + " ");
+        }
+    }
+}
