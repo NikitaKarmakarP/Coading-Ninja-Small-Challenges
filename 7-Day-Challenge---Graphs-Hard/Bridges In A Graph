@@ -1,0 +1,79 @@
+import java.util.*;
+
+public class Solution {
+
+    // Static variable for the DFS time counter
+    static int time = 0;
+
+    // Helper method to perform DFS and find bridges
+    public static void dfs(int u, int parent, int[] disc, int[] low, boolean[] visited, List<List<Integer>> bridges, List<List<Integer>> adj) {
+        visited[u] = true;
+        disc[u] = low[u] = time++; // Discovery time and low value
+
+        for (int v : adj.get(u)) {
+            // If v is not visited, do DFS for v
+            if (!visited[v]) {
+                dfs(v, u, disc, low, visited, bridges, adj);
+
+                // Check if the subtree rooted at v has a connection back to one of the ancestors of u
+                low[u] = Math.min(low[u], low[v]);
+
+                // If the lowest vertex reachable from v is below u in DFS tree, then (u, v) is a bridge
+                if (low[v] > disc[u]) {
+                    bridges.add(Arrays.asList(u, v));
+                }
+            }
+            // If v is already visited and v is not the parent of u, update low[u]
+            else if (v != parent) {
+                low[u] = Math.min(low[u], disc[v]);
+            }
+        }
+    }
+
+    // Main method to find bridges
+    public static List<List<Integer>> findBridges(int[][] edges, int V, int E) {
+        List<List<Integer>> bridges = new ArrayList<>();
+        List<List<Integer>> adj = new ArrayList<>();
+
+        // Initialize adjacency list for the graph
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // Fill adjacency list with given edges
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        // Initialize necessary arrays
+        int[] disc = new int[V]; // Discovery times of visited vertices
+        int[] low = new int[V];  // Lowest points reachable from vertices
+        boolean[] visited = new boolean[V]; // Visited array
+
+        // Start DFS from all unvisited vertices (in case the graph is disconnected)
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfs(i, -1, disc, low, visited, bridges, adj);
+            }
+        }
+
+        return bridges;
+    }
+
+    public static void main(String[] args) {
+        // Test case
+        int[][] edges = {{0, 1}, {3, 1}, {1, 2}, {3, 4}};
+        int V = 5, E = 4;
+
+        List<List<Integer>> result = findBridges(edges, V, E);
+
+        // Output the result
+        System.out.println("Bridges: ");
+        for (List<Integer> bridge : result) {
+            System.out.println(bridge.get(0) + " " + bridge.get(1));
+        }
+    }
+}
