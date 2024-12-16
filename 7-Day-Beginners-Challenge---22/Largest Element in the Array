@@ -1,0 +1,40 @@
+import java.util.* ;
+import java.io.*; 
+
+public class Solution {
+
+    // Function to find the largest element in the array
+    static int largestElement(int[] arr, int n) {
+        // Initialize the largest element as the smallest possible integer
+        int max = Integer.MIN_VALUE;
+        
+        // Iterate through the array to find the largest element
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > max) {
+                max = arr[i]; // Update max if the current element is larger
+            }
+        }
+        
+        return max; // Return the largest element
+    }
+
+    public static void main(String[] args) throws IOException {
+        // Read input using BufferedReader for fast input reading
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        
+        // Read the size of the array
+        int n = Integer.parseInt(reader.readLine());
+        
+        // Read the array elements
+        String[] strArr = reader.readLine().split(" "); // Split input string into individual numbers
+        
+        // Convert the string array to integer array
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(strArr[i]); // Convert each element to integer
+        }
+        
+        // Call the largestElement function and print the result
+        System.out.println(largestElement(arr, n)); // Correct usage
+    }
+}
