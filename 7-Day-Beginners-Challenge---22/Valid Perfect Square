@@ -1,0 +1,31 @@
+import java.util.*;
+import java.io.*;
+
+public class Solution {
+    public static boolean isPerfectSquare(long n) {
+        // Calculate the square root of n and check if the square of the integer part equals n
+        long sqrt = (long) Math.sqrt(n);
+        return sqrt * sqrt == n;
+    }
+
+    public static void main(String[] args) throws IOException {
+        // Fast input reading
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        // Read number of test cases
+        int T = Integer.parseInt(reader.readLine());
+
+        // Process each test case
+        while (T-- > 0) {
+            // Read the integer N for this test case
+            long n = Long.parseLong(reader.readLine());
+
+            // Check if N is a perfect square and print the result
+            if (isPerfectSquare(n)) {
+                System.out.println("Yes");
+            } else {
+                System.out.println("No");
+            }
+        }
+    }
+}
