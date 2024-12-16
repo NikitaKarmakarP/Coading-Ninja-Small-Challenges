@@ -1,0 +1,53 @@
+#include <map>
+#include <vector>
+using namespace std;
+
+class DisjointIntervals {
+private:
+    // Map to store intervals, with the start of the interval as the key and the end as the value
+    map<int, int> intervals;
+
+public:
+    // Constructor
+    DisjointIntervals() {}
+
+    // Function to add an integer to the stream
+    void addInteger(int val) {
+        // Find the first interval where the start is greater than `val`
+        auto it = intervals.upper_bound(val);
+
+        int start = val, end = val; // New interval boundaries
+
+        // Check if `val` can merge with the previous interval
+        if (it != intervals.begin()) {
+            auto prevIt = prev(it);
+            if (prevIt->second >= val) {
+                // `val` is already included in the previous interval
+                return;
+            } else if (prevIt->second == val - 1) {
+                // Merge `val` with the previous interval
+                start = prevIt->first;
+                intervals.erase(prevIt);
+            }
+        }
+
+        // Check if `val` can merge with the next interval
+        if (it != intervals.end() && it->first == val + 1) {
+            // Merge `val` with the next interval
+            end = it->second;
+            intervals.erase(it);
+        }
+
+        // Insert the new or merged interval
+        intervals[start] = end;
+    }
+
+    // Function to return the current disjoint intervals
+    vector<vector<int>> getDisjointIntervals() {
+        vector<vector<int>> result;
+        for (const auto& [start, end] : intervals) {
+            result.push_back({start, end});
+        }
+        return result;
+    }
+};
